@@ -14,18 +14,16 @@ def top_ten(subreddit):
 
     # Check for a valid response
     if response.status_code != 200:
-        print(None)
-        return
+        return  # Do nothing if an invalid subreddit is provided
 
     # Try to extract the data from the response
     try:
         posts = response.json().get("data", {}).get("children", [])
         if not posts:
-            print(None)
-            return
+            return  # Do nothing if no posts are found
 
         # Print the titles of the first 10 hot posts
         for post in posts:
             print(post.get("data", {}).get("title"))
     except (KeyError, ValueError):
-        print(None)
+        return  # Handle any parsing error silently
