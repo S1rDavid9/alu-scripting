@@ -24,7 +24,8 @@ def recurse(subreddit, hot_list=[], after=None):
     params = {"limit": 100, "after": after}  # Get up to 100 posts per call
 
     # Make the request to Reddit API
-    response = requests.get(url, headers=headers, params=params, allow_redirects=False)
+    response = requests.get(url, headers=headers, params=params,\n
+ allow_redirects=False)
 
     # Check for valid response
     if response.status_code != 200:
@@ -40,7 +41,8 @@ def recurse(subreddit, hot_list=[], after=None):
         for post in children:
             hot_list.append(post.get("data", {}).get("title"))
 
-        # If there's an 'after' value, make a recursive call to fetch more results
+        # If there's an 'after' value, make a recursive call to fetch more \n
+results
         if after is not None:
             return recurse(subreddit, hot_list, after)
         else:
