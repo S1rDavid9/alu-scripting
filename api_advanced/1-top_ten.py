@@ -1,55 +1,50 @@
 #!/usr/bin/python3
 """
-Print the titles of the first 10Hot Posts
+A module that prints the titles of the first 10 hot posts from a given subreddit.
+
+This module contains a single function, `top_ten(subreddit)`, that fetches the
+titles of the first 10 hot posts from the Reddit API for a specified subreddit.
+
+Requirements:
+- requests module (install with `pip install requests` if not already installed)
+
+Usage:
+- Call `top_ten(subreddit)`, where `subreddit` is the name of the subreddit 
+  to query. If the subreddit is valid, it will print the titles of the first 10 
+  hot posts; otherwise, it will print `None`.
 """
+
 import requests
 
+def top_ten(subreddit):
+    """
+    Fetch and print the titles of the first 10 hot posts from a given subreddit.
+    
+    Parameters:
+    subreddit (str): The name of the subreddit to query.
 
+    Returns:
+    None: The function prints the titles directly or prints `None` if the subreddit is invalid.
 
-def count_words(subreddit, word_list, word_count={}, after=None):
-    """The top ten titles"""
-    # Base URL for querying the Reddit API
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
-    headers = {"User-Agent": "MyRedditApp/0.1 (by u/yourusername)"}
-    params = {"limit": 100, "after": after}
+    The function sends a GET request to the Reddit API with a custom User-Agent
+    header. If successful, it prints the titles of the first 10 hot posts. If the 
+    request fails (e.g., if the subreddit does not exist), it prints `None`.
+    """
+    headers = {'User-Agent': 'MyAPI/0.0.1'}
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
+    response = requests.get(url, headers=headers, allow_redirects=False)
 
-    # Make the request to Reddit API
-    response = requests.get(url, headers=headers, params=params, allow_redirects=False)
-
-    # Check if subreddit is valid
-    if response.status_code != 200:
-        return None  # Explicitly return None if the subreddit is invalid
-
-    # Extract JSON data from the response
-    data = response.json().get("data", {})
-    children = data.get("children", [])
-    after = data.get("after", None)  # Pagination token
-
-    # Normalize word_list to lower case
-    word_list = [word.lower() for word in word_list]
-
-    # Loop through each post
-    for post in children:
-        title = post.get("data", {}).get("title", "").lower()  # Get the title and normalize it
-
-        # Split the title into words and count occurrences of keywords in word_list
-        for word in title.split():
-            # Strip non-alphanumeric characters from each word
-            word = word.strip('.,!?_-')
-            if word in word_list:
-                if word in word_count:
-                    word_count[word] += 1
-                else:
-                    word_count[word] = 1
-
-    # If there's more data (pagination), recursively call the function
-    if after is not None:
-        return count_words(subreddit, word_list, word_count, after)
-
-    # Once all pages are processed, sort and print the results
-    if word_count:
-        sorted_counts = sorted(word_count.items(), key=lambda kv: (-kv[1], kv[0]))
-        for word, count in sorted_counts:
-            print(f"{word}: {count}")
+    # Check if the response status is OK
+    if response.status_code == 200:
+        json_data = response.json()
+        posts = json_data.get('data', {}).get('children', [])
+        
+        # Check if posts are available and print each title
+        if posts:
+            for post in posts:
+                print(post.get('data', {}).get('title'))
+        else:
+            print(None)
     else:
-        print("OK")  # For both valid and empty subreddits, we output "OK"
+        # If subreddit doesn't exist or there was an error, print None
+        print(None)
