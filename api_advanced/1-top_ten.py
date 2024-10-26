@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""3-count.py - Count occurrences of words in hot articles on Reddit."""
+"""Print the titles of the first 10Hot Posts"""
 
 import requests
 
