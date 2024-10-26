@@ -1,10 +1,13 @@
 #!/usr/bin/python3
-"""Print the titles of the first 10Hot Posts"""
+"""
+Print the titles of the first 10Hot Posts
+"""
 import requests
 
 
 
 def count_words(subreddit, word_list, word_count={}, after=None):
+    """The top ten titles"""
     # Base URL for querying the Reddit API
     url = f"https://www.reddit.com/r/{subreddit}/hot.json"
     headers = {"User-Agent": "MyRedditApp/0.1 (by u/yourusername)"}
@@ -50,4 +53,3 @@ def count_words(subreddit, word_list, word_count={}, after=None):
             print(f"{word}: {count}")
     else:
         print("OK")  # For both valid and empty subreddits, we output "OK"
-
