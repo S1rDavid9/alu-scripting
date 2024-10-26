@@ -1,20 +1,10 @@
 #!/usr/bin/python3
 """Print the titles of the first 10Hot Posts"""
-
 import requests
 
 
-def count_words(subreddit, word_list, word_count={}, after=None):
-    """
-    Queries the Reddit API recursively, parses the title of all hot articles,
-    and prints a sorted count of given keywords (case-insensitive).
 
-    Args:
-        subreddit (str): The name of the subreddit to query.
-        word_list (list): List of keywords to count occurrences of.
-        word_count (dict): Dictionary to store the count of keywords.
-        after (str): The 'after' key for pagination (defaults to None).
-    """
+def count_words(subreddit, word_list, word_count={}, after=None):
     # Base URL for querying the Reddit API
     url = f"https://www.reddit.com/r/{subreddit}/hot.json"
     headers = {"User-Agent": "MyRedditApp/0.1 (by u/yourusername)"}
